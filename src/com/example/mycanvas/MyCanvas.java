@@ -30,7 +30,8 @@ public class MyCanvas extends View
 	private int blinkCounter;
 	final private int blinkOffset = 20;
 	final private int pointSize = 10;
-
+	final private int blinkFrequency = 1000;
+	
 	private Handler handler = new Handler()
 	{
 		public void handleMessage(Message msg)
@@ -84,18 +85,24 @@ public class MyCanvas extends View
 			blinkCounter += blinkOffset*direction;
 			if(blinkCounter > canvas.getWidth() || blinkCounter < 0)
 				direction *= -1;
+			int displayPointsCounter = 0;
 			for (Rect rect : points)
 			{
 				if (InBlinkRange(rect, canvas.getWidth()))
 				{
-					Rect tempRect = new Rect(rect);
-					tempRect.left = (canvas.getWidth() - pointSize) / 2;
-					tempRect.right = (canvas.getWidth() + pointSize) / 2;
-
-					if(normalShow)
+					if (normalShow)
+					{
 						canvas.drawRect(rect, paint);
+					}
 					else
+					{
+						int width = canvas.getWidth();
+						Rect tempRect = new Rect(rect);
+						tempRect.left = (width - pointSize) / 2 + displayPointsCounter;
+						tempRect.right = (width + pointSize) / 2 + displayPointsCounter;
+						displayPointsCounter++;
 						canvas.drawRect(tempRect, paint);
+					}
 				}
 			}
 		}
@@ -136,11 +143,12 @@ public class MyCanvas extends View
 
 	public void startBlink()
 	{
-		if (mode == Mode.RUN)
+	if (mode == Mode.RUN)
 			return;
 		mode = Mode.RUN;
+		timer = new Timer();
 		TimerTask task = new BlinkTask(this);
-		timer.schedule(task, 0, 15);
+		timer.schedule(task, 0, blinkFrequency);
 		System.out.println("start blink done");
 	}
 
@@ -154,7 +162,7 @@ public class MyCanvas extends View
 		if (mode != Mode.RUN)
 			return;
 		mode = Mode.EDIT;
-		timer.purge();
+		timer.cancel();
 		blinkCounter = 0;
 	}
 
