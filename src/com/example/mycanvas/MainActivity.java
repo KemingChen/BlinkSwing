@@ -17,9 +17,11 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements SensorEventListener
 {
-	float gX = 0;
-	float gY = 0;
-	float gZ = 0;
+	final int reverseRange = 8;// must be even
+	final double vibrationSensitivity = 2.0;
+	int count = 0;
+	char gY[] = new char[reverseRange];
+	char now;
 	MyCanvas myCanvas;
 	private SensorManager sensorManager;
 
@@ -72,6 +74,12 @@ public class MainActivity extends Activity implements SensorEventListener
 			}
 		});
 		;
+
+		now = ' ';
+		for (int i = 0; i < reverseRange; i++)
+		{
+			gY[i] = ' ';
+		}
 	}
 
 	@Override
@@ -131,11 +139,23 @@ public class MainActivity extends Activity implements SensorEventListener
 	@Override
 	public void onSensorChanged(SensorEvent event)
 	{
-		// TODO Auto-generated method stub
-		float[] values = event.values;
-		gX = values[0];
-		gY = values[1];
-		gZ = values[2];
-		System.out.println(gY);
+		float value = event.values[0]; //Grab x Axis
+		if (Math.abs(value) >= vibrationSensitivity)
+		{
+			gY[count] = String.valueOf(value).toCharArray()[0] == '-' ? '-' : '+'; // record left or right
+
+			if (now != gY[count])
+			{
+				myCanvas.ReverseDirection(gY[count] == '+' ? 1 : -1);
+				now = gY[count];
+			}
+
+			// System.out.println(gY[count] + " " + String.valueOf(values[1])); // debug using
+		}
+		else
+		{
+			gY[count] = ' ';
+		}
+		count = (count + 1) % reverseRange;
 	}
 }

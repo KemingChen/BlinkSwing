@@ -115,6 +115,19 @@ public class MyCanvas extends View
 		return x < width + blinkOffset && x > width - blinkOffset;
 	}
 
+	public void ReverseDirection(int direction)
+	{
+		this.direction = direction;
+		if (direction == -1)
+		{
+			System.out.println("right");
+		}
+		else
+		{
+			System.out.println("left");
+		}
+	}
+	
 	@Override
 	public boolean onTouchEvent(android.view.MotionEvent event)
 	{
