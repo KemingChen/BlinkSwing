@@ -21,7 +21,7 @@ public class MyCanvas extends View
 		EDIT, RUN,
 	}
 
-	public boolean normalShow = true;//for test
+	public boolean normalShow = true;// for test
 
 	private Mode mode;
 	private Timer timer = new Timer();
@@ -32,9 +32,9 @@ public class MyCanvas extends View
 	private int blinkCounter;
 	private int swingShowWidth = 0;
 
-	final private int blinkOffset = 5;
-	final private int pointSize = 10;
-	final private int blinkFrequency = 1;
+	final private int blinkOffset = 300;
+	final private int pointSize = 20;
+	final private int blinkFrequency = 1000 / 3;
 
 	private Handler handler = new Handler()
 	{
@@ -89,11 +89,16 @@ public class MyCanvas extends View
 			int displayPointsCounter = 0;
 			swingShowWidth = canvas.getWidth();
 
-			blinkCounter += blinkOffset*direction;
-			if(blinkCounter > swingShowWidth)
-				blinkCounter = swingShowWidth;
-			else if(blinkCounter < 0)
-				blinkCounter = 0;
+			blinkCounter += blinkOffset * direction;
+			if (blinkCounter > swingShowWidth - blinkOffset - swingShowWidth % blinkOffset)
+				blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
+			else if (blinkCounter < 0 + blinkOffset)
+				blinkCounter = 0 + blinkOffset;
+
+			// if (blinkCounter > swingShowWidth - blinkOffset)
+			// direction = -1;
+			// else if (blinkCounter < 0 + blinkOffset)
+			// direction = 1;
 
 			for (Rect rect : points)
 			{
@@ -107,8 +112,8 @@ public class MyCanvas extends View
 					{
 						int width = canvas.getWidth();
 						Rect tempRect = new Rect(rect);
-						tempRect.left += width / 2 - blinkCounter % canvas.getWidth();
-						tempRect.right += width / 2 - blinkCounter % canvas.getWidth();
+						tempRect.left += width / 2 - blinkCounter % canvas.getWidth() - blinkOffset / 2;
+						tempRect.right += width / 2 - blinkCounter % canvas.getWidth() - blinkOffset / 2;
 						displayPointsCounter++;
 						canvas.drawRect(tempRect, paint);
 					}
@@ -119,9 +124,9 @@ public class MyCanvas extends View
 
 	private boolean InBlinkRange(Rect rect, int canvasWidth)
 	{
-		int width = blinkCounter % canvasWidth;
+		int width = blinkCounter;
 		int x = rect.centerX();
-		return x < width + blinkOffset && x > width - blinkOffset;
+		return x > width && x < width + blinkOffset;
 	}
 
 	public void ReverseDirection(int direction)
@@ -129,12 +134,12 @@ public class MyCanvas extends View
 		this.direction = direction;
 		if (direction == 1)
 		{
-			blinkCounter = 0;
+			blinkCounter = 0 + blinkOffset;
 			System.out.println("right");
 		}
 		else
 		{
-			blinkCounter = swingShowWidth;
+			blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
 			System.out.println("left");
 		}
 	}
