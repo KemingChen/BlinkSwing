@@ -26,8 +26,8 @@ public class MyCanvas extends View
 	private Mode mode;
 	private Timer timer = new Timer();
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-	private ArrayList<Rect> points = new ArrayList<Rect>();
-
+	private ArrayList<ArrayList<Rect>> pointPages;
+	private int nowPage = 0;
 	private int direction = 1;
 	private int blinkCounter;
 	private int swingShowWidth = 0;
@@ -72,11 +72,16 @@ public class MyCanvas extends View
 		mode = Mode.EDIT;
 		blinkCounter = 0;
 		this.setBackgroundColor(Color.BLACK);
+
+		pointPages = new ArrayList<ArrayList<Rect>>();
+		pointPages.add(new ArrayList<Rect>());
+		nowPage = 0;
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
+		ArrayList<Rect> points = pointPages.get(nowPage);
 		if (mode == Mode.EDIT)
 		{
 			for (int i = 0; i < points.size(); i++)
@@ -151,7 +156,7 @@ public class MyCanvas extends View
 			return false;
 		int x = ((int) event.getX() / pointSize) * pointSize;
 		int y = ((int) event.getY() / pointSize) * pointSize;
-		points.add(new Rect(x, y, x + pointSize, y + pointSize));
+		pointPages.get(nowPage).add(new Rect(x, y, x + pointSize, y + pointSize));
 		this.invalidate();
 		return true;
 	}
@@ -166,7 +171,7 @@ public class MyCanvas extends View
 	{
 		if (mode != Mode.EDIT)
 			return;
-		points.clear();
+		pointPages.get(nowPage).clear();
 		this.invalidate();
 	}
 
@@ -198,5 +203,32 @@ public class MyCanvas extends View
 	public Mode getMode()
 	{
 		return this.mode;
+	}
+
+	public void nextPage()
+	{
+		nowPage = (nowPage + 1) % pointPages.size();
+		this.invalidate();
+	}
+
+	public void prePage()
+	{
+		nowPage = (nowPage + pointPages.size() - 1) % pointPages.size();
+		this.invalidate();
+	}
+
+	public void newPage()
+	{
+		pointPages.add(nowPage, new ArrayList<Rect>());
+		this.invalidate();
+	}
+
+	public void delPage()
+	{
+		if(pointPages.size()>1)
+		{
+			pointPages.remove(nowPage);
+			this.invalidate();
+		}
 	}
 }
