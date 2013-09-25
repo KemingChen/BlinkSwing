@@ -98,8 +98,8 @@ public class MyCanvas extends View
 					{
 						int width = canvas.getWidth();
 						Rect tempRect = new Rect(rect);
-						tempRect.left = (width - pointSize) / 2 + displayPointsCounter;
-						tempRect.right = (width + pointSize) / 2 + displayPointsCounter;
+						tempRect.left += width / 2 - blinkCounter % canvas.getWidth();
+						tempRect.right += width / 2 - blinkCounter % canvas.getWidth();
 						displayPointsCounter++;
 						canvas.drawRect(tempRect, paint);
 					}
