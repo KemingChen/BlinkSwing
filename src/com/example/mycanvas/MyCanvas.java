@@ -21,20 +21,29 @@ public class MyCanvas extends View
 		EDIT, RUN,
 	}
 
+	// Test
 	public boolean normalShow = true;// for test
 
+	// Object
 	private Mode mode;
 	private Timer timer = new Timer();
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private ArrayList<Rect> points = new ArrayList<Rect>();
 
+	// Variable
 	private int direction = 1;
 	private int blinkCounter;
 	private int swingShowWidth = 0;
+	private int count = 0;
 
-	final private int blinkOffset = 300;
+	// Parameter
+	final private int swingFrequency = 6;
+	final private int density = 5;
+	final private int blinkOffset = 100;
 	final private int pointSize = 20;
-	final private int blinkFrequency = 1000 / 3;
+	
+	// Theorem
+	final private int blinkFrequency = 1000 / ((swingFrequency * density) * 2);
 
 	private Handler handler = new Handler()
 	{
@@ -84,21 +93,22 @@ public class MyCanvas extends View
 				canvas.drawRect(points.get(i), paint);
 			}
 		}
-		else if (mode == Mode.RUN)
+		else if (mode == Mode.RUN && count == 1)
 		{
 			int displayPointsCounter = 0;
 			swingShowWidth = canvas.getWidth();
 
 			blinkCounter += blinkOffset * direction;
-			if (blinkCounter > swingShowWidth - blinkOffset - swingShowWidth % blinkOffset)
-				blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
-			else if (blinkCounter < 0 + blinkOffset)
-				blinkCounter = 0 + blinkOffset;
 
-			// if (blinkCounter > swingShowWidth - blinkOffset)
-			// direction = -1;
+			// if (blinkCounter > swingShowWidth - blinkOffset - swingShowWidth % blinkOffset)
+			// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
 			// else if (blinkCounter < 0 + blinkOffset)
-			// direction = 1;
+			// blinkCounter = 0 + blinkOffset;
+
+			if (blinkCounter > swingShowWidth - blinkOffset)
+				direction = -1;
+			else if (blinkCounter < 0 + blinkOffset)
+				direction = 1;
 
 			for (Rect rect : points)
 			{
@@ -120,6 +130,7 @@ public class MyCanvas extends View
 				}
 			}
 		}
+		count = (count + 1) % density;
 	}
 
 	private boolean InBlinkRange(Rect rect, int canvasWidth)
@@ -134,12 +145,12 @@ public class MyCanvas extends View
 		this.direction = direction;
 		if (direction == 1)
 		{
-			blinkCounter = 0 + blinkOffset;
+			// blinkCounter = 0 + blinkOffset;
 			System.out.println("right");
 		}
 		else
 		{
-			blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
+			// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
 			System.out.println("left");
 		}
 	}
