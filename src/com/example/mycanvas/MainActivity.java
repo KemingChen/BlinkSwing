@@ -17,11 +17,8 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements SensorEventListener
 {
-	final int reverseRange = 8;// must be even
 	final double vibrationSensitivity = 2.0;
-	int count = 0;
-	char gY[] = new char[reverseRange];
-	char now;
+	char lastDirection = ' ';
 	MyCanvas myCanvas;
 	private SensorManager sensorManager;
 
@@ -74,12 +71,6 @@ public class MainActivity extends Activity implements SensorEventListener
 			}
 		});
 		;
-
-		now = ' ';
-		for (int i = 0; i < reverseRange; i++)
-		{
-			gY[i] = ' ';
-		}
 	}
 
 	@Override
@@ -120,12 +111,9 @@ public class MainActivity extends Activity implements SensorEventListener
 	protected void SetSensor()
 	{
 		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION);
-		// 如果有取到該手機的方位感測器，就註冊他。
-		if (sensors.size() > 0)
+		if (sensors.size() > 0) // if device has LINEAR_ACCELERATION
 		{
-			// registerListener必須要implements SensorEventListener，
-			// 而SensorEventListener必須實作onAccuracyChanged與onSensorChanged
-			// 感應器註冊
+			// Sensor Register
 			sensorManager.registerListener(this, (Sensor) sensors.get(0), SensorManager.SENSOR_DELAY_NORMAL);
 		}
 	}
@@ -139,23 +127,24 @@ public class MainActivity extends Activity implements SensorEventListener
 	@Override
 	public void onSensorChanged(SensorEvent event)
 	{
-		float value = event.values[0]; //Grab x Axis
+		float value = event.values[0]; // Grab x Axis
+		char direction; // now direction
+		
 		if (Math.abs(value) >= vibrationSensitivity)
 		{
-			gY[count] = String.valueOf(value).toCharArray()[0] == '-' ? '-' : '+'; // record left or right
+			direction = String.valueOf(value).toCharArray()[0] == '-' ? '-' : '+'; // record left or right
 
-			if (now != gY[count])
+			if (lastDirection != direction)
 			{
-				myCanvas.ReverseDirection(gY[count] == '+' ? 1 : -1);
-				now = gY[count];
+				myCanvas.ReverseDirection(direction == '+' ? 1 : -1);
+				lastDirection = direction;
 			}
 
-			// System.out.println(gY[count] + " " + String.valueOf(values[1])); // debug using
+			// System.out.println(direction + " " + String.valueOf(values[1])); // debug using
 		}
 		else
 		{
-			gY[count] = ' ';
+			direction = ' ';
 		}
-		count = (count + 1) % reverseRange;
 	}
 }
