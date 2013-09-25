@@ -70,7 +70,38 @@ public class MainActivity extends Activity implements SensorEventListener
 				myCanvas.normalShow = !myCanvas.normalShow;
 			}
 		});
-		;
+		((Button) findViewById(R.id.button_left)).setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				myCanvas.prePage();
+			}
+		});
+		((Button) findViewById(R.id.button_right)).setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				myCanvas.nextPage();
+			}
+		});
+		((Button) findViewById(R.id.button_new)).setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				myCanvas.newPage();
+			}
+		});
+		((Button) findViewById(R.id.button_delete)).setOnClickListener(new Button.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				myCanvas.delPage();
+			}
+		});
 	}
 
 	@Override

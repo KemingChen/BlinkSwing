@@ -22,15 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1" />
-
-    <Button
-        android:id="@+id/button_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/myCanvas1"
-        android:layout_toRightOf="@+id/button1"
-        android:text="@string/start" />
+        android:layout_below="@+id/button_left" />
 
     <ToggleButton
         android:id="@+id/toggleButton1"
@@ -41,16 +33,44 @@
         android:layout_toRightOf="@+id/button_start"
         android:text="ToggleButton" />
 
-    <EditText
-        android:id="@+id/editText1"
+    <Button
+        android:id="@+id/button_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/toggleButton1"
-        android:layout_alignRight="@+id/myCanvas1"
-        android:layout_toRightOf="@+id/toggleButton1"
-        android:ems="10" >
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/button1"
+        android:text="&lt;" />
 
-        <requestFocus />
-    </EditText>
+    <Button
+        android:id="@+id/button_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/leftButton"
+        android:layout_toRightOf="@+id/button1"
+        android:text="@string/start" />
+
+    <Button
+        android:id="@+id/button_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toggleButton1"
+        android:layout_toLeftOf="@+id/toggleButton1"
+        android:text="new" />
+
+    <Button
+        android:id="@+id/button_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/myCanvas1"
+        android:layout_toRightOf="@+id/toggleButton1"
+        android:text=">" />
+
+    <Button
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/toggleButton1"
+        android:layout_below="@+id/toggleButton1"
+        android:text="del" />
 
 </RelativeLayout>
