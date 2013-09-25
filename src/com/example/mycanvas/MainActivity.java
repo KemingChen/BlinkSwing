@@ -129,18 +129,19 @@ public class MainActivity extends Activity implements SensorEventListener
 	{
 		float value = event.values[0]; // Grab x Axis
 		char direction; // now direction
-		
+
 		if (Math.abs(value) >= vibrationSensitivity)
 		{
+
 			direction = String.valueOf(value).toCharArray()[0] == '-' ? '-' : '+'; // record left or right
 
 			if (lastDirection != direction)
 			{
-				myCanvas.ReverseDirection(direction == '+' ? 1 : -1);
+				myCanvas.ReverseDirection(direction == '-' ? 1 : -1);
 				lastDirection = direction;
 			}
 
-			// System.out.println(direction + " " + String.valueOf(values[1])); // debug using
+			// System.out.println(direction + " " + String.valueOf(values)); // debug using
 		}
 		else
 		{

@@ -22,16 +22,20 @@ public class MyCanvas extends View
 	}
 
 	public boolean normalShow = true;//for test
-	private int direction = 1;
-	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-	private ArrayList<Rect> points = new ArrayList<Rect>();
+
 	private Mode mode;
 	private Timer timer = new Timer();
+	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private ArrayList<Rect> points = new ArrayList<Rect>();
+
+	private int direction = 1;
 	private int blinkCounter;
-	final private int blinkOffset = 20;
+	private int swingShowWidth = 0;
+
+	final private int blinkOffset = 5;
 	final private int pointSize = 10;
-	final private int blinkFrequency = 1000;
-	
+	final private int blinkFrequency = 1;
+
 	private Handler handler = new Handler()
 	{
 		public void handleMessage(Message msg)
@@ -82,13 +86,18 @@ public class MyCanvas extends View
 		}
 		else if (mode == Mode.RUN)
 		{
-			blinkCounter += blinkOffset*direction;
-			if(blinkCounter > canvas.getWidth() || blinkCounter < 0)
-				direction *= -1;
 			int displayPointsCounter = 0;
+			swingShowWidth = canvas.getWidth();
+
+			blinkCounter += blinkOffset*direction;
+			if(blinkCounter > swingShowWidth)
+				blinkCounter = swingShowWidth;
+			else if(blinkCounter < 0)
+				blinkCounter = 0;
+
 			for (Rect rect : points)
 			{
-				if (InBlinkRange(rect, canvas.getWidth()))
+				if (InBlinkRange(rect, swingShowWidth))
 				{
 					if (normalShow)
 					{
@@ -118,23 +127,25 @@ public class MyCanvas extends View
 	public void ReverseDirection(int direction)
 	{
 		this.direction = direction;
-		if (direction == -1)
+		if (direction == 1)
 		{
+			blinkCounter = 0;
 			System.out.println("right");
 		}
 		else
 		{
+			blinkCounter = swingShowWidth;
 			System.out.println("left");
 		}
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(android.view.MotionEvent event)
 	{
 		if (mode != Mode.EDIT)
 			return false;
-		int x = (int) event.getX();
-		int y = (int) event.getY();
+		int x = ((int) event.getX() / pointSize) * pointSize;
+		int y = ((int) event.getY() / pointSize) * pointSize;
 		points.add(new Rect(x, y, x + pointSize, y + pointSize));
 		this.invalidate();
 		return true;
@@ -156,7 +167,7 @@ public class MyCanvas extends View
 
 	public void startBlink()
 	{
-	if (mode == Mode.RUN)
+		if (mode == Mode.RUN)
 			return;
 		mode = Mode.RUN;
 		timer = new Timer();
