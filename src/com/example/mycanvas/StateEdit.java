@@ -1,32 +1,38 @@
 package com.example.mycanvas;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.example.mycanvas.MyCanvas.StateName;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public class StateEdit extends State
 {
+	private Paint paint;
+	private int pointSize;
 
-	public StateEdit(MyCanvas newCanvas)
+	public StateEdit(MyCanvas newCanvas,UIParameter parameter)
 	{
 		super(newCanvas);
+		this.paint = parameter.getPaint();
+		this.pointSize = parameter.getPointSize();
 	}
 
 	@Override
 	public void startBlink()
 	{
-		int blinkFrequency = myCanvas.getDisplayCore().getBlinkFrequency();
+		int blinkFrequency = myCanvas.getBlinkCore().getBlinkFrequency();
 		Timer timer = new Timer();
 		TimerTask task = new BlinkTask(myCanvas);
 		timer.schedule(task, 0, blinkFrequency);
 		myCanvas.setTimer(timer);
 		myCanvas.setState(StateName.RUN);
-		myCanvas.getDisplayCore().initial();
+		myCanvas.getBlinkCore().initial();
 	}
 
 	@Override
@@ -43,20 +49,20 @@ public class StateEdit extends State
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		int pointSize = myCanvas.getDisplayCore().getPointSize();
 		int x = ((int) event.getX() / pointSize) * pointSize;
 		int y = ((int) event.getY() / pointSize) * pointSize;
-		myCanvas.addPointInNowPage(new Rect(x, y, x + pointSize, y + pointSize));
+		myCanvas.addPointInCurrentPage(new Rect(x, y, x + pointSize, y + pointSize));
 		myCanvas.invalidate();
 		return true;
-		
 	}
 
 	@Override
 	public void onDraw(Canvas canvas)
 	{
-		// TODO Auto-generated method stub
-		
+		ArrayList<Rect> points = myCanvas.getCurrentPoints();
+		for (int i = 0; i < points.size(); i++)
+		{
+			canvas.drawRect(points.get(i), paint);
+		}
 	}
-
 }

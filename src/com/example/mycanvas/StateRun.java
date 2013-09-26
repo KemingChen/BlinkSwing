@@ -8,9 +8,12 @@ import android.view.MotionEvent;
 public class StateRun extends State
 {
 
+	private BlinkCore blinkCore;
+
 	public StateRun(MyCanvas newCanvas)
 	{
 		super(newCanvas);
+		blinkCore = myCanvas.getBlinkCore();
 	}
 
 	@Override
@@ -39,8 +42,7 @@ public class StateRun extends State
 	@Override
 	public void onDraw(Canvas canvas)
 	{
-		// TODO Auto-generated method stub
-		
+		blinkCore.onBlinkDraw(canvas);
 	}
 
 }

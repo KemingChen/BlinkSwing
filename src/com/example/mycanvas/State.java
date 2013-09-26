@@ -5,9 +5,10 @@ import android.graphics.Canvas;
 public abstract class State
 {
 	protected MyCanvas myCanvas;
+
 	public State(MyCanvas newCanvas)
 	{
-		this.myCanvas = newCanvas;
+		this.myCanvas = newCanvas;;
 	}
 	public abstract void startBlink();
 	public abstract void stopBlink();
