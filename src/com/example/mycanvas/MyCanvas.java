@@ -1,6 +1,10 @@
 package com.example.mycanvas;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,7 +20,7 @@ import android.view.View;
 
 public class MyCanvas extends View
 {
-	public enum Mode
+	public enum StateName
 	{
 		EDIT, RUN,
 	}
@@ -25,11 +29,12 @@ public class MyCanvas extends View
 	public boolean normalShow = true;// for test
 
 	// Object
-	private Mode mode;
 	private Timer timer = new Timer();
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-	private ArrayList<Rect> points = new ArrayList<Rect>();
 	private ArrayList<ArrayList<Rect>> pointPages;
+	private Map<StateName, State> states = new HashMap<StateName, State>();
+	private StateName nowState;
+	private DisplayCore displayCore = new DisplayCore();
 
 	// Variable
 	private int nowPage = 0;
@@ -43,7 +48,7 @@ public class MyCanvas extends View
 	final private int density = 5;
 	final private int blinkOffset = 100;
 	final private int pointSize = 20;
-	
+
 	// Theorem
 	final private int blinkFrequency = 1000 / ((swingFrequency * density) * 2);
 
@@ -77,10 +82,12 @@ public class MyCanvas extends View
 
 	private void init()
 	{
+		states.put(StateName.EDIT, new StateEdit(this));
+		states.put(StateName.RUN, new StateRun(this));
 		paint.setStyle(Paint.Style.FILL);
 		paint.setStrokeWidth(1);
 		paint.setColor(Color.WHITE);
-		mode = Mode.EDIT;
+		nowState = StateName.EDIT;
 		blinkCounter = 0;
 		this.setBackgroundColor(Color.BLACK);
 
@@ -93,14 +100,14 @@ public class MyCanvas extends View
 	protected void onDraw(Canvas canvas)
 	{
 		ArrayList<Rect> points = pointPages.get(nowPage);
-		if (mode == Mode.EDIT)
+		if (nowState == StateName.EDIT)
 		{
 			for (int i = 0; i < points.size(); i++)
 			{
 				canvas.drawRect(points.get(i), paint);
 			}
 		}
-		else if (mode == Mode.RUN && count == 1)
+		else if (nowState == StateName.RUN && count == 1)
 		{
 			int displayPointsCounter = 0;
 			swingShowWidth = canvas.getWidth();
@@ -165,7 +172,7 @@ public class MyCanvas extends View
 	@Override
 	public boolean onTouchEvent(android.view.MotionEvent event)
 	{
-		if (mode != Mode.EDIT)
+		if (nowState != StateName.EDIT)
 			return false;
 		int x = ((int) event.getX() / pointSize) * pointSize;
 		int y = ((int) event.getY() / pointSize) * pointSize;
@@ -180,42 +187,24 @@ public class MyCanvas extends View
 		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
 	}
 
-	public void clear()
-	{
-		if (mode != Mode.EDIT)
-			return;
-		pointPages.get(nowPage).clear();
-		this.invalidate();
-	}
-
-	public void startBlink()
-	{
-		if (mode == Mode.RUN)
-			return;
-		mode = Mode.RUN;
-		timer = new Timer();
-		TimerTask task = new BlinkTask(this);
-		timer.schedule(task, 0, blinkFrequency);
-		System.out.println("start blink done");
-	}
-
 	public void sendBlinkMessageThroughtHandler()
 	{
 		handler.sendEmptyMessage(1);
 	}
 
-	public void stopBlink()
+	public void clear()
 	{
-		if (mode != Mode.RUN)
-			return;
-		mode = Mode.EDIT;
-		timer.cancel();
-		blinkCounter = 0;
+		states.get(nowState).clear();
 	}
 
-	public Mode getMode()
+	public void startBlink()
 	{
-		return this.mode;
+		states.get(nowState).startBlink();
+	}
+
+	public void stopBlink()
+	{
+		states.get(nowState).stopBlink();
 	}
 
 	public void nextPage()
@@ -238,10 +227,41 @@ public class MyCanvas extends View
 
 	public void delPage()
 	{
-		if(pointPages.size()>1)
+		if (pointPages.size() > 1)
 		{
 			pointPages.remove(nowPage);
 			this.invalidate();
 		}
+	}
+
+	public void clearPage()
+	{
+		pointPages.get(nowPage).clear();
+		this.invalidate();
+	}
+
+	public void setState(StateName newState)
+	{
+		nowState = newState;
+	}
+
+	public void setTimer(Timer newTimer)
+	{
+		this.timer = newTimer;
+	}
+
+	public Timer getTimer()
+	{
+		return timer;
+	}
+
+	public DisplayCore getDisplayCore()
+	{
+		return displayCore;
+	}
+
+	public void addPointInNowPage(Rect rect)
+	{
+		pointPages.get(nowPage).add(rect);
 	}
 }
