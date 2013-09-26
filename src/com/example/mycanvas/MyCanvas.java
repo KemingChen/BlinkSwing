@@ -42,12 +42,14 @@ public class MyCanvas extends View
 	private int blinkCounter;
 	private int swingShowWidth = 0;
 	private int count = 0;
+	char lastDirect = ' ';
 
 	// Parameter
 	final private int swingFrequency = 6;
 	final private int density = 5;
 	final private int blinkOffset = 100;
 	final private int pointSize = 20;
+	final double vibrationSensitivity = 10.0;
 
 	// Theorem
 	final private int blinkFrequency = 1000 / ((swingFrequency * density) * 2);
@@ -154,18 +156,29 @@ public class MyCanvas extends View
 		return x > width && x < width + blinkOffset;
 	}
 
-	public void ReverseDirection(int direction)
+	public void OnChangeAcceleration(float value)
 	{
-		this.direction = direction;
-		if (direction == 1)
+		char direct = String.valueOf(value).toCharArray()[0] == '-' ? '-' : '+'; // record left or right // now direction
+		float magnitude = Math.abs(value); // now magnitude
+
+		if (magnitude >= vibrationSensitivity)
 		{
-			// blinkCounter = 0 + blinkOffset;
-			System.out.println("right");
-		}
-		else
-		{
-			// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
-			System.out.println("left");
+			if (lastDirect != direct)
+			{
+				direction = direct == '-' ? 1 : -1;
+				if (direction == 1)
+				{
+					// blinkCounter = 0 + blinkOffset;
+					System.out.println("right");
+				}
+				else
+				{
+					// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
+					System.out.println("left");
+				}
+				lastDirect = direct;
+			}
+			//System.out.println(direct + " " + String.valueOf(value)); // debug using
 		}
 	}
 
