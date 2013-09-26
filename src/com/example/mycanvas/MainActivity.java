@@ -17,8 +17,6 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements SensorEventListener
 {
-	final double vibrationSensitivity = 2.0;
-	char lastDirection = ' ';
 	MyCanvas myCanvas;
 	private SensorManager sensorManager;
 
@@ -138,10 +136,9 @@ public class MainActivity extends Activity implements SensorEventListener
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void SetSensor()
 	{
-		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION);
+		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
 		if (sensors.size() > 0) // if device has LINEAR_ACCELERATION
 		{
 			// Sensor Register
@@ -159,24 +156,6 @@ public class MainActivity extends Activity implements SensorEventListener
 	public void onSensorChanged(SensorEvent event)
 	{
 		float value = event.values[0]; // Grab x Axis
-		char direction; // now direction
-
-		if (Math.abs(value) >= vibrationSensitivity)
-		{
-
-			direction = String.valueOf(value).toCharArray()[0] == '-' ? '-' : '+'; // record left or right
-
-			if (lastDirection != direction)
-			{
-				myCanvas.ReverseDirection(direction == '-' ? 1 : -1);
-				lastDirection = direction;
-			}
-
-			// System.out.println(direction + " " + String.valueOf(values)); // debug using
-		}
-		else
-		{
-			direction = ' ';
-		}
+		myCanvas.OnChangeAcceleration(value);
 	}
 }
