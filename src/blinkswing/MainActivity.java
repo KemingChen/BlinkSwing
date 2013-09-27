@@ -1,6 +1,8 @@
-package com.example.mycanvas;
+package blinkswing;
 
 import java.util.List;
+
+import com.example.mycanvas.R;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

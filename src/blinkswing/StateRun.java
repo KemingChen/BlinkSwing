@@ -1,7 +1,6 @@
-package com.example.mycanvas;
+package blinkswing;
 
-import com.example.mycanvas.MyCanvas.StateName;
-
+import blinkswing.MyCanvas.StateName;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 

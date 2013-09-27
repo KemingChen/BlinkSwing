@@ -1,4 +1,4 @@
-package com.example.mycanvas;
+package blinkswing;
 
 import java.util.ArrayList;
 

@@ -1,11 +1,10 @@
-package com.example.mycanvas;
+package blinkswing;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.mycanvas.MyCanvas.StateName;
-
+import blinkswing.MyCanvas.StateName;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;

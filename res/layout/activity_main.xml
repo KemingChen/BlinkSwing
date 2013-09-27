@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/clear" />
 
-    <com.example.mycanvas.MyCanvas
+    <blinkswing.MyCanvas
         android:id="@+id/myCanvas1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
