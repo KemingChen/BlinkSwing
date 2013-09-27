@@ -12,6 +12,7 @@ public class BlinkCore
 	private int blinkCounter;
 	private int count;
 	private MyCanvas myCanvas;
+	private CanvasPager pager;
 
 	// Parameter
 	final private int swingFrequency = 6;
@@ -24,6 +25,7 @@ public class BlinkCore
 	public BlinkCore(MyCanvas myCanvas)
 	{
 		this.myCanvas = myCanvas;
+		this.pager = myCanvas.getCanvasPager();
 		initial();
 	}
 	
@@ -40,24 +42,25 @@ public class BlinkCore
 	
 	public void onBlinkDraw(Canvas canvas)
 	{
-		ArrayList<Rect> points = myCanvas.getCurrentPoints();
+		ArrayList<Rect> points = pager.getCurrentPoints();
 		Paint paint = myCanvas.getUIParameter().getPaint();
 		int swingShowWidth;
 		if (count == 1)
 		{
-			swingShowWidth = canvas.getWidth();
 			blinkCounter += blinkOffset * myCanvas.getDirection();
-
+			swingShowWidth = canvas.getWidth();
 			// if (blinkCounter > swingShowWidth - blinkOffset - swingShowWidth % blinkOffset)
 			// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
 			// else if (blinkCounter < 0 + blinkOffset)
 			// blinkCounter = 0 + blinkOffset;
-
 			if (blinkCounter > swingShowWidth - blinkOffset)
+			{
 				myCanvas.setDirection(-1);
+			}
 			else if (blinkCounter < 0 + blinkOffset)
+			{
 				myCanvas.setDirection(1);
-
+			}
 			for (Rect rect : points)
 			{
 				if (InBlinkRange(rect, swingShowWidth))

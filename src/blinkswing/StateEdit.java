@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 public class StateEdit extends State
 {
 	private Paint paint;
+	private CanvasPager pager;
 	private int pointSize;
 
 	public StateEdit(MyCanvas newCanvas,UIParameter parameter)
@@ -20,6 +21,7 @@ public class StateEdit extends State
 		super(newCanvas);
 		this.paint = parameter.getPaint();
 		this.pointSize = parameter.getPointSize();
+		this.pager = myCanvas.getCanvasPager();
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class StateEdit extends State
 	@Override
 	public void clear()
 	{
-		myCanvas.clearPage();
+		pager.clearPage();
 	}
 
 	@Override
@@ -50,7 +52,7 @@ public class StateEdit extends State
 	{
 		int x = ((int) event.getX() / pointSize) * pointSize;
 		int y = ((int) event.getY() / pointSize) * pointSize;
-		myCanvas.addPointInCurrentPage(new Rect(x, y, x + pointSize, y + pointSize));
+		pager.addPointInCurrentPage(new Rect(x, y, x + pointSize, y + pointSize));
 		myCanvas.invalidate();
 		return true;
 	}
@@ -58,7 +60,7 @@ public class StateEdit extends State
 	@Override
 	public void onDraw(Canvas canvas)
 	{
-		ArrayList<Rect> points = myCanvas.getCurrentPoints();
+		ArrayList<Rect> points = pager.getCurrentPoints();
 		for (int i = 0; i < points.size(); i++)
 		{
 			canvas.drawRect(points.get(i), paint);

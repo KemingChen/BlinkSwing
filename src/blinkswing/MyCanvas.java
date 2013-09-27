@@ -27,14 +27,13 @@ public class MyCanvas extends View
 
 	// Object
 	private Timer timer = new Timer();
-	private ArrayList<ArrayList<Rect>> pointPages;
 	private Map<StateName, State> states = new HashMap<StateName, State>();
 	private StateName nowState;
+	private CanvasPager pager = new CanvasPager(this);
 	private BlinkCore blinkCore = new BlinkCore(this);
 	private UIParameter uiParameter = new UIParameter();
 	
 	// Variable
-	private int nowPage = 0;
 	private int direction = 1;
 	char lastDirect = ' ';
 
@@ -77,10 +76,8 @@ public class MyCanvas extends View
 		nowState = StateName.EDIT;
 		this.setBackgroundColor(Color.BLACK);
 
-		pointPages = new ArrayList<ArrayList<Rect>>();
-		pointPages.add(new ArrayList<Rect>());
-		nowPage = 0;
 		direction =1;
+		pager.init();
 	}
 
 	@SuppressLint("WrongCall")
@@ -148,39 +145,6 @@ public class MyCanvas extends View
 		states.get(nowState).stopBlink();
 	}
 
-	public void nextPage()
-	{
-		nowPage = (nowPage + 1) % pointPages.size();
-		this.invalidate();
-	}
-
-	public void prePage()
-	{
-		nowPage = (nowPage + pointPages.size() - 1) % pointPages.size();
-		this.invalidate();
-	}
-
-	public void newPage()
-	{
-		pointPages.add(nowPage, new ArrayList<Rect>());
-		this.invalidate();
-	}
-
-	public void delPage()
-	{
-		if (pointPages.size() > 1)
-		{
-			pointPages.remove(nowPage);
-			this.invalidate();
-		}
-	}
-
-	public void clearPage()
-	{
-		pointPages.get(nowPage).clear();
-		this.invalidate();
-	}
-
 	public void setState(StateName newState)
 	{
 		nowState = newState;
@@ -201,16 +165,6 @@ public class MyCanvas extends View
 		return blinkCore;
 	}
 
-	public void addPointInCurrentPage(Rect rect)
-	{
-		pointPages.get(nowPage).add(rect);
-	}
-
-	public ArrayList<Rect> getCurrentPoints()
-	{
-		return pointPages.get(nowPage);
-	}
-
 	public UIParameter getUIParameter()
 	{
 		return uiParameter;
@@ -224,6 +178,11 @@ public class MyCanvas extends View
 	public void setDirection(int direction)
 	{
 		this.direction = direction;
+	}
+
+	public CanvasPager getCanvasPager()
+	{
+		return pager;
 	}
 
 }
