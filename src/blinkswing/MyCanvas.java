@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 
+import com.example.mycanvas.R;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,6 +16,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MyCanvas extends View
 {
@@ -32,14 +37,13 @@ public class MyCanvas extends View
 	private StateName nowState;
 	private BlinkCore blinkCore = new BlinkCore(this);
 	private UIParameter uiParameter = new UIParameter();
-	
+
 	// Variable
 	private int nowPage = 0;
-	private int direction = 1;
 	char lastDirect = ' ';
 
 	// Parameter
-	final double vibrationSensitivity = 10.0;
+	final double vibrationSensitivity = 2.0;
 
 	private Handler handler = new Handler()
 	{
@@ -80,7 +84,6 @@ public class MyCanvas extends View
 		pointPages = new ArrayList<ArrayList<Rect>>();
 		pointPages.add(new ArrayList<Rect>());
 		nowPage = 0;
-		direction =1;
 	}
 
 	@SuppressLint("WrongCall")
@@ -99,21 +102,15 @@ public class MyCanvas extends View
 		{
 			if (lastDirect != direct)
 			{
-				direction = direct == '-' ? 1 : -1;
-				if (direction == 1)
-				{
-					// blinkCounter = 0 + blinkOffset;
-					System.out.println("right");
-				}
-				else
-				{
-					// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
-					System.out.println("left");
-				}
+				blinkCore.setDirection(direct == '-' ? 1 : -1);
 				lastDirect = direct;
 			}
-			// System.out.println(direct + " " + String.valueOf(value)); // debug using
 		}
+		else
+		{
+			lastDirect = ' ';
+		}
+		blinkCore.setMagnitude(magnitude);
 	}
 
 	@Override
@@ -215,15 +212,4 @@ public class MyCanvas extends View
 	{
 		return uiParameter;
 	}
-	
-	public int getDirection()
-	{
-		return direction;
-	}
-
-	public void setDirection(int direction)
-	{
-		this.direction = direction;
-	}
-
 }

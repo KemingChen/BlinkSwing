@@ -8,7 +8,8 @@ import android.graphics.Rect;
 
 public class BlinkCore
 {
-	//private int direction;
+	private int direction;
+	private float magnitude;
 	private int blinkCounter;
 	private int count;
 	private MyCanvas myCanvas;
@@ -17,7 +18,7 @@ public class BlinkCore
 	final private int swingFrequency = 6;
 	final private int density = 5;
 	final private int blinkOffset = 100;
-	
+
 	// Theorem
 	final private int blinkFrequency = 1000 / ((swingFrequency * density) * 2);
 
@@ -26,18 +27,18 @@ public class BlinkCore
 		this.myCanvas = myCanvas;
 		initial();
 	}
-	
+
 	public void initial()
 	{
 		blinkCounter = 0;
 		count = 0;
 	}
-	
+
 	public int getBlinkFrequency()
 	{
 		return blinkFrequency;
 	}
-	
+
 	public void onBlinkDraw(Canvas canvas)
 	{
 		ArrayList<Rect> points = myCanvas.getCurrentPoints();
@@ -46,17 +47,17 @@ public class BlinkCore
 		if (count == 1)
 		{
 			swingShowWidth = canvas.getWidth();
-			blinkCounter += blinkOffset * myCanvas.getDirection();
+			blinkCounter += blinkOffset * direction;
 
 			// if (blinkCounter > swingShowWidth - blinkOffset - swingShowWidth % blinkOffset)
 			// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
 			// else if (blinkCounter < 0 + blinkOffset)
 			// blinkCounter = 0 + blinkOffset;
 
-			if (blinkCounter > swingShowWidth - blinkOffset)
-				myCanvas.setDirection(-1);
-			else if (blinkCounter < 0 + blinkOffset)
-				myCanvas.setDirection(1);
+			// if (blinkCounter > swingShowWidth - blinkOffset)
+			// myCanvas.setDirection(-1);
+			// else if (blinkCounter < 0 + blinkOffset)
+			// myCanvas.setDirection(1);
 
 			for (Rect rect : points)
 			{
@@ -79,10 +80,21 @@ public class BlinkCore
 		}
 		count = (count + 1) % density;
 	}
+
 	private boolean InBlinkRange(Rect rect, int canvasWidth)
 	{
 		int width = blinkCounter;
 		int x = rect.centerX();
 		return x > width && x < width + blinkOffset;
+	}
+
+	public void setDirection(int direction)
+	{
+		this.direction = direction;
+	}
+
+	public void setMagnitude(float magnitude)
+	{
+		this.magnitude = magnitude;
 	}
 }
