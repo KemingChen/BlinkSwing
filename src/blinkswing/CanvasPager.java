@@ -35,7 +35,16 @@ public class CanvasPager
 
 	public void newPage()
 	{
-		pointPages.add(nowPage, new ArrayList<Rect>());
+		ArrayList<Rect> points = new ArrayList<Rect>();
+		if(nowPage==pointPages.size()-1)
+		{
+			pointPages.add(points);
+		}
+		else
+		{
+			pointPages.add(nowPage+1, points);
+		}
+		nowPage++;
 		parentCanvas.invalidate();
 	}
 
@@ -61,7 +70,7 @@ public class CanvasPager
 	
 	public boolean isLastPage()
 	{
-		return nowPage==pointPages.size();
+		return nowPage==pointPages.size()-1;
 	}
 	
 	public void addPointInCurrentPage(Rect rect)

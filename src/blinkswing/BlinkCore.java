@@ -55,11 +55,27 @@ public class BlinkCore
 			// blinkCounter = 0 + blinkOffset;
 			if (blinkCounter > swingShowWidth - blinkOffset)
 			{
-				myCanvas.setDirection(-1);
+				if(pager.isLastPage())
+				{
+					myCanvas.setDirection(-1);
+				}
+				else
+				{	
+					pager.nextPage();
+					blinkCounter = 0;
+				}
 			}
 			else if (blinkCounter < 0 + blinkOffset)
 			{
-				myCanvas.setDirection(1);
+				if(pager.isFirstPage())
+				{
+					myCanvas.setDirection(1);
+				}
+				else
+				{	
+					pager.prePage();
+					blinkCounter = swingShowWidth;
+				}
 			}
 			for (Rect rect : points)
 			{
