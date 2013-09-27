@@ -75,7 +75,7 @@ public class MainActivity extends Activity implements SensorEventListener
 			@Override
 			public void onClick(View v)
 			{
-				myCanvas.prePage();
+				myCanvas.getCanvasPager().prePage();
 			}
 		});
 		((Button) findViewById(R.id.button_right)).setOnClickListener(new Button.OnClickListener()
@@ -83,7 +83,7 @@ public class MainActivity extends Activity implements SensorEventListener
 			@Override
 			public void onClick(View v)
 			{
-				myCanvas.nextPage();
+				myCanvas.getCanvasPager().nextPage();
 			}
 		});
 		((Button) findViewById(R.id.button_new)).setOnClickListener(new Button.OnClickListener()
@@ -91,7 +91,7 @@ public class MainActivity extends Activity implements SensorEventListener
 			@Override
 			public void onClick(View v)
 			{
-				myCanvas.newPage();
+				myCanvas.getCanvasPager().newPage();
 			}
 		});
 		((Button) findViewById(R.id.button_delete)).setOnClickListener(new Button.OnClickListener()
@@ -99,7 +99,7 @@ public class MainActivity extends Activity implements SensorEventListener
 			@Override
 			public void onClick(View v)
 			{
-				myCanvas.delPage();
+				myCanvas.getCanvasPager().delPage();
 			}
 		});
 	}
