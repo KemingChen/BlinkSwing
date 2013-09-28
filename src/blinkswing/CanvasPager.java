@@ -53,6 +53,10 @@ public class CanvasPager
 		if (pointPages.size() > 1)
 		{
 			pointPages.remove(nowPage);
+			if(nowPage==pointPages.size())
+			{
+				nowPage--;
+			}
 			parentCanvas.invalidate();
 		}
 	}
