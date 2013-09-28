@@ -45,23 +45,23 @@ public class BlinkCore
 	{
 		ArrayList<Rect> points = pager.getCurrentPoints();
 		Paint paint = myCanvas.getUIParameter().getPaint();
-		int swingShowWidth;
+		int canvasWidth;
 		if (count == 1)
 		{
 
-			swingShowWidth = canvas.getWidth();
-			blinkCounter += blinkOffset * direction;
+			canvasWidth = canvas.getWidth();
+			blinkCounter = blinkCounter + (blinkOffset * direction) % canvasWidth;
 
 			// if (blinkCounter > swingShowWidth - blinkOffset - swingShowWidth % blinkOffset)
 			// blinkCounter = swingShowWidth - blinkOffset - swingShowWidth % blinkOffset;
 			// else if (blinkCounter < 0 + blinkOffset)
 			// blinkCounter = 0 + blinkOffset;
 
-			if (blinkCounter > swingShowWidth - blinkOffset)
+			if (blinkCounter > canvasWidth)
 			{
 				if (pager.isLastPage())
 				{
-					direction = -1;
+					direction = 0;
 					// myCanvas.setDirection(-1);
 				}
 				else
@@ -70,23 +70,23 @@ public class BlinkCore
 					blinkCounter = 0;
 				}
 			}
-			else if (blinkCounter < 0 + blinkOffset)
+			else if (blinkCounter < 0)
 			{
 				if (pager.isFirstPage())
 				{
-					direction = 1;
+					direction = 0;
 					// myCanvas.setDirection(1);
 				}
 				else
 				{
 					pager.prePage();
-					blinkCounter = swingShowWidth;
+					blinkCounter = canvasWidth - canvasWidth % blinkOffset + blinkOffset;
 				}
 			}
 
 			for (Rect rect : points)
 			{
-				if (InBlinkRange(rect, swingShowWidth))
+				if (InBlinkRange(rect, canvasWidth))
 				{
 					if (myCanvas.normalShow)
 					{
@@ -110,12 +110,25 @@ public class BlinkCore
 	{
 		int width = blinkCounter;
 		int x = rect.centerX();
-		return x > width && x < width + blinkOffset;
+		if (blinkCounter >= 0)
+			return x > width && x < width + blinkOffset;
+		else
+			return false;
 	}
 
 	public void setDirection(int direction)
 	{
 		this.direction = direction;
+
+		// Test
+		if (direction == 1)
+		{
+			System.out.println("right");
+		}
+		else
+		{
+			System.out.println("left");
+		}
 	}
 
 	public void setMagnitude(float magnitude)

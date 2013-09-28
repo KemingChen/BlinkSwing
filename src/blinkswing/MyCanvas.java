@@ -98,7 +98,7 @@ public class MyCanvas extends View
 		}
 		else
 		{
-			lastDirect = ' ';
+			// lastDirect = ' ';
 		}
 		blinkCore.setMagnitude(magnitude);
 	}
