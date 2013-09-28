@@ -24,7 +24,7 @@ public class MyCanvas extends View
 	public boolean normalShow = true;// for test
 
 	// Object
-	private Timer timer = new Timer();
+	private MyTimer timer = new MyTimer(this);
 	private Map<StateName, State> states = new HashMap<StateName, State>();
 	private StateName nowState;
 	private CanvasPager pager = new CanvasPager(this);
@@ -140,12 +140,12 @@ public class MyCanvas extends View
 		nowState = newState;
 	}
 
-	public void setTimer(Timer newTimer)
+	public void setTimer(MyTimer newTimer)
 	{
 		this.timer = newTimer;
 	}
 
-	public Timer getTimer()
+	public MyTimer getTimer()
 	{
 		return timer;
 	}
