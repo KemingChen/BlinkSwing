@@ -28,12 +28,8 @@ public class StateEdit extends State
 	public void startBlink()
 	{
 		int blinkFrequency = myCanvas.getBlinkCore().getBlinkFrequency();
-//		Timer timer = new Timer();
-//		TimerTask task = new BlinkTask(myCanvas);
-//		timer.schedule(task, 0, blinkFrequency);
-//		myCanvas.setTimer(timer);
 		MyTimer timer = new MyTimer(myCanvas);
-		timer.setPeriod(0, 1000);
+		timer.setPeriod(blinkFrequency, 0);
 		timer.start();
 		myCanvas.setTimer(timer);
 		myCanvas.setState(StateName.RUN);
