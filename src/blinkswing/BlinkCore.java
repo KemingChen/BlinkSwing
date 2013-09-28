@@ -8,20 +8,21 @@ import android.graphics.Rect;
 
 public class BlinkCore
 {
+	// Variable
 	private int direction;
 	private float magnitude;
 	private int blinkCounter;
-	private int count;
+	private int blinkIntervalCounter;
 	private MyCanvas myCanvas;
 	private CanvasPager pager;
 
 	// Parameter
 	final private int swingFrequency = 6;
-	final private int density = 5;
+	final private int blinkInterval = 4;
 	final private int blinkOffset = 100;
 
 	// Theorem
-	final private int blinkFrequency = 1000 / ((swingFrequency * density) * 2);
+	final private int blinkFrequency = 1000 / ((swingFrequency * (blinkInterval + 1)) * 2);
 
 	public BlinkCore(MyCanvas myCanvas)
 	{
@@ -33,7 +34,7 @@ public class BlinkCore
 	public void initial()
 	{
 		blinkCounter = 0;
-		count = 0;
+		blinkIntervalCounter = 0;
 	}
 
 	public int getBlinkFrequency()
@@ -46,7 +47,7 @@ public class BlinkCore
 		ArrayList<Rect> points = pager.getCurrentPoints();
 		Paint paint = myCanvas.getUIParameter().getPaint();
 		int canvasWidth;
-		if (count == 1)
+		if (blinkIntervalCounter == 1)
 		{
 
 			canvasWidth = canvas.getWidth();
@@ -103,17 +104,14 @@ public class BlinkCore
 				}
 			}
 		}
-		count = (count + 1) % density;
+		blinkIntervalCounter = (blinkIntervalCounter + 1) % blinkInterval;
 	}
 
 	private boolean InBlinkRange(Rect rect, int canvasWidth)
 	{
 		int width = blinkCounter;
 		int x = rect.centerX();
-		if (blinkCounter >= 0)
-			return x > width && x < width + blinkOffset;
-		else
-			return false;
+		return blinkCounter >= 0 ? x > width && x < width + blinkOffset : false;
 	}
 
 	public void setDirection(int direction)
