@@ -158,6 +158,6 @@ public class MainActivity extends Activity implements SensorEventListener
 	public void onSensorChanged(SensorEvent event)
 	{
 		float value = event.values[0]; // Grab x Axis
-		myCanvas.OnChangeAcceleration(value);
+		myCanvas.OnChangeAcceleration(value, event.timestamp);
 	}
 }

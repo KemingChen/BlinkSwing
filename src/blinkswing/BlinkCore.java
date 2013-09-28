@@ -13,8 +13,10 @@ public class BlinkCore
 	private float magnitude;
 	private int blinkCounter;
 	private int blinkIntervalCounter;
+	private long lastReverseTime;
 	private MyCanvas myCanvas;
 	private CanvasPager pager;
+	private CalcuAverage swingAvgTime;
 
 	// Parameter
 	final private int swingFrequency = 6;
@@ -35,6 +37,8 @@ public class BlinkCore
 	{
 		blinkCounter = 0;
 		blinkIntervalCounter = 0;
+		lastReverseTime = 0;
+		swingAvgTime = new CalcuAverage(10, 1000000);
 	}
 
 	public int getBlinkFrequency()
@@ -114,10 +118,14 @@ public class BlinkCore
 		return blinkCounter >= 0 ? x > width && x < width + blinkOffset : false;
 	}
 
-	public void setDirection(int direction)
+	public void setDirection(int direction, long timestamp)
 	{
 		this.direction = direction;
-
+		swingAvgTime.saveValue(timestamp - lastReverseTime);
+		lastReverseTime = timestamp;
+		// System.out.println("stamp: " + timestamp);
+		System.out.println("avg : " + swingAvgTime.getValue());
+		
 		// Test
 		if (direction == 1)
 		{

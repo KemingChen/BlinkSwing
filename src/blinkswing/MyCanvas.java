@@ -83,7 +83,7 @@ public class MyCanvas extends View
 		states.get(nowState).onDraw(canvas);
 	}
 
-	public void OnChangeAcceleration(float value)
+	public void OnChangeAcceleration(float value, long timestamp)
 	{
 		char direct = String.valueOf(value).toCharArray()[0] == '-' ? '-' : '+'; // record left or right // now direction
 		float magnitude = Math.abs(value); // now magnitude
@@ -92,13 +92,9 @@ public class MyCanvas extends View
 		{
 			if (lastDirect != direct)
 			{
-				blinkCore.setDirection(direct == '-' ? 1 : -1);
+				blinkCore.setDirection(direct == '-' ? 1 : -1, timestamp);
 				lastDirect = direct;
 			}
-		}
-		else
-		{
-			// lastDirect = ' ';
 		}
 		blinkCore.setMagnitude(magnitude);
 	}
