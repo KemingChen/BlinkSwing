@@ -14,9 +14,13 @@ public class BlinkCore
 	private int blinkCounter;
 	private int blinkIntervalCounter;
 	private long lastReverseTime;
+	private long AccumuMagnitude;
+
+	// Object
 	private MyCanvas myCanvas;
 	private CanvasPager pager;
 	private CalcuAverage swingAvgTime;
+	private CalcuAverage swingAvgWidth;
 
 	// Parameter
 	final private int swingFrequency = 6;
@@ -37,8 +41,12 @@ public class BlinkCore
 	{
 		blinkCounter = 0;
 		blinkIntervalCounter = 0;
+
 		lastReverseTime = 0;
 		swingAvgTime = new CalcuAverage(10, 1000000);
+
+		AccumuMagnitude = 0;
+		swingAvgWidth = new CalcuAverage(10, 1000000);
 	}
 
 	public int getBlinkFrequency()
@@ -118,27 +126,23 @@ public class BlinkCore
 		return blinkCounter >= 0 ? x > width && x < width + blinkOffset : false;
 	}
 
-	public void setDirection(int direction, long timestamp)
+	public void setGSensorValue(int direction, float magnitude, long timestamp)
 	{
-		this.direction = direction;
-		swingAvgTime.saveValue(timestamp - lastReverseTime);
-		lastReverseTime = timestamp;
-		// System.out.println("stamp: " + timestamp);
-		System.out.println("avg : " + swingAvgTime.getValue());
-		
-		// Test
-		if (direction == 1)
-		{
-			System.out.println("right");
-		}
-		else
-		{
-			System.out.println("left");
-		}
-	}
+		AccumuMagnitude += magnitude;
 
-	public void setMagnitude(float magnitude)
-	{
-		this.magnitude = magnitude;
+		if (direction != 0)
+		{
+			this.direction = direction;
+			swingAvgTime.saveValue(timestamp - lastReverseTime);
+			System.out.println("AccumuMagnitude: " + AccumuMagnitude);
+			swingAvgWidth.saveValue(AccumuMagnitude);
+			lastReverseTime = timestamp;
+			AccumuMagnitude = 0;
+
+			// System.out.println("stamp: " + timestamp);
+			System.out.println("avg : " + swingAvgTime.getValue());// Debug Test
+			System.out.println("width : " + swingAvgWidth.getValue());// Debug Test
+			System.out.println(direction == 1 ? "right" : "left");// Debug Test
+		}
 	}
 }

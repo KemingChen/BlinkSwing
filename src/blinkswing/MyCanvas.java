@@ -92,11 +92,14 @@ public class MyCanvas extends View
 		{
 			if (lastDirect != direct)
 			{
-				blinkCore.setDirection(direct == '-' ? 1 : -1, timestamp);
+				blinkCore.setGSensorValue(direct == '-' ? 1 : -1, magnitude, timestamp);
 				lastDirect = direct;
 			}
 		}
-		blinkCore.setMagnitude(magnitude);
+		else
+		{
+			blinkCore.setGSensorValue(0, magnitude, timestamp);
+		}
 	}
 
 	@Override
