@@ -31,8 +31,8 @@ public class MyTimer extends Thread
 				e.printStackTrace();
 			}
 		}
-		System.out.println((System.currentTimeMillis() - testStartTime));
-		System.out.println(testCount);
+		System.out.println("SpendTime: " + (System.currentTimeMillis() - testStartTime));
+		System.out.println("Count: " + testCount);
 	}
 
 	public void cancel()
@@ -42,6 +42,7 @@ public class MyTimer extends Thread
 
 	public void setPeriod(int period_ms, int period_us)
 	{
+		System.out.println("period_ms: " + period_ms);
 		this.period_ms = period_ms;
 		this.period_us = period_us;
 	}

@@ -24,8 +24,8 @@ public class BlinkCore
 
 	// Parameter
 	final private int swingFrequency = 6;
-	final private int blinkInterval = 4;
-	final private int blinkOffset = 100;
+	final private int blinkInterval = 2;
+	final private int blinkOffset = 20 * 6;
 
 	// Theorem
 	final private int blinkFrequency = 1000 / ((swingFrequency * (blinkInterval + 1)) * 2);
@@ -63,6 +63,7 @@ public class BlinkCore
 		{
 
 			canvasWidth = canvas.getWidth();
+			// System.out.println(canvasWidth);
 			blinkCounter = blinkCounter + (blinkOffset * direction) % canvasWidth;
 
 			// if (blinkCounter > swingShowWidth - blinkOffset - swingShowWidth % blinkOffset)
@@ -116,7 +117,7 @@ public class BlinkCore
 				}
 			}
 		}
-		blinkIntervalCounter = (blinkIntervalCounter + 1) % blinkInterval;
+		blinkIntervalCounter = (blinkIntervalCounter + 1) % (blinkInterval + 1);
 	}
 
 	private boolean InBlinkRange(Rect rect, int canvasWidth)
@@ -139,8 +140,9 @@ public class BlinkCore
 			lastReverseTime = timestamp;
 			AccumuMagnitude = 0;
 
+			myCanvas.getTimer().setPeriod((int) swingAvgTime.getValue() / (blinkInterval + 1) / ((492 + 2 * blinkOffset) * 1000000 / blinkOffset), 0);// 492
 			// System.out.println("stamp: " + timestamp);
-			System.out.println("avg : " + swingAvgTime.getValue());// Debug Test
+			System.out.println("avg : " + swingAvgTime.getValue() / 1000000);// Debug Test
 			System.out.println("width : " + swingAvgWidth.getValue());// Debug Test
 			System.out.println(direction == 1 ? "right" : "left");// Debug Test
 		}
