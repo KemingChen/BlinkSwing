@@ -26,13 +26,13 @@ public class MyCanvas extends View
 	// Object
 	private MyTimer timer = new MyTimer(this);
 	private Map<StateName, State> states = new HashMap<StateName, State>();
-	private StateName nowState;
 	private CanvasPager pager = new CanvasPager(this);
 	private BlinkCore blinkCore = new BlinkCore(this);
 	private UIParameter uiParameter = new UIParameter();
 
 	// Variable
 	char lastDirect = ' ';
+	private State state;
 
 	// Parameter
 	final double vibrationSensitivity = 2.0;
@@ -70,7 +70,7 @@ public class MyCanvas extends View
 		states.put(StateName.EDIT, new StateEdit(this, uiParameter));
 		states.put(StateName.RUN, new StateRun(this));
 
-		nowState = StateName.EDIT;
+		setState(StateName.EDIT);
 		this.setBackgroundColor(Color.BLACK);
 
 		pager.init();
@@ -80,7 +80,7 @@ public class MyCanvas extends View
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
-		states.get(nowState).onDraw(canvas);
+		state.onDraw(canvas);
 	}
 
 	public void OnChangeAcceleration(float value, long timestamp)
@@ -102,7 +102,7 @@ public class MyCanvas extends View
 	@Override
 	public boolean onTouchEvent(android.view.MotionEvent event)
 	{
-		return states.get(nowState).onTouchEvent(event);
+		return state.onTouchEvent(event);
 	}
 
 	@Override
@@ -118,22 +118,22 @@ public class MyCanvas extends View
 
 	public void clear()
 	{
-		states.get(nowState).clear();
+		state.clear();
 	}
 
 	public void startBlink()
 	{
-		states.get(nowState).startBlink();
+		state.startBlink();
 	}
 
 	public void stopBlink()
 	{
-		states.get(nowState).stopBlink();
+		state.stopBlink();
 	}
 
-	public void setState(StateName newState)
+	public void setState(StateName stateName)
 	{
-		nowState = newState;
+		this.state = states.get(stateName);
 	}
 
 	public void setTimer(MyTimer newTimer)

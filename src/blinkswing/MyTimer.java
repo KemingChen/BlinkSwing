@@ -6,7 +6,7 @@ public class MyTimer extends Thread
 	private boolean isCanceled;
 	private int period_ms;
 	private int period_us;
-	
+
 	public MyTimer(MyCanvas myCanvas)
 	{
 		period_ms = 1000;
@@ -31,7 +31,7 @@ public class MyTimer extends Thread
 				e.printStackTrace();
 			}
 		}
-		System.out.println((System.currentTimeMillis()-testStartTime));
+		System.out.println((System.currentTimeMillis() - testStartTime));
 		System.out.println(testCount);
 	}
 

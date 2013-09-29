@@ -16,7 +16,7 @@ public class StateEdit extends State
 	private CanvasPager pager;
 	private int pointSize;
 
-	public StateEdit(MyCanvas newCanvas,UIParameter parameter)
+	public StateEdit(MyCanvas newCanvas, UIParameter parameter)
 	{
 		super(newCanvas);
 		this.paint = parameter.getPaint();
@@ -38,7 +38,7 @@ public class StateEdit extends State
 
 	@Override
 	public void stopBlink()
-	{	
+	{
 	}
 
 	@Override

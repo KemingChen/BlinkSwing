@@ -8,11 +8,16 @@ public abstract class State
 
 	public State(MyCanvas newCanvas)
 	{
-		this.myCanvas = newCanvas;;
+		this.myCanvas = newCanvas;
 	}
+
 	public abstract void startBlink();
+
 	public abstract void stopBlink();
+
 	public abstract void clear();
+
 	public abstract void onDraw(Canvas canvas);
+
 	public abstract boolean onTouchEvent(android.view.MotionEvent event);
 }

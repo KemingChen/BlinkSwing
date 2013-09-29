@@ -6,7 +6,6 @@ import android.view.MotionEvent;
 
 public class StateRun extends State
 {
-
 	private BlinkCore blinkCore;
 
 	public StateRun(MyCanvas newCanvas)
